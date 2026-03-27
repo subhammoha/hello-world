@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Book an Appointment with Shiva 📅</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap');
+
+    :root {
+      --bg: #fff9f0;
+      --primary: #ff6b35;
+      --secondary: #f7c59f;
+      --accent: #1a936f;
+      --danger: #e63946;
+      --card: #ffffff;
+      --text: #2d2d2d;
+      --muted: #888;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* ─── HERO ─── */
+    header {
+      background: linear-gradient(135deg, #ff6b35 0%, #f7971e 100%);
+      color: white;
+      text-align: center;
+      padding: 40px 20px 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: "🏸🏊🏋️🍳🃏🎸🎮🛌";
+      position: absolute;
+      font-size: 60px;
+      opacity: 0.08;
+      top: -10px; left: -10px;
+      letter-spacing: 8px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      width: 120%;
+      pointer-events: none;
+    }
+    header h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(2rem, 6vw, 3.5rem);
+      letter-spacing: 1px;
+      text-shadow: 3px 3px 0 rgba(0,0,0,0.15);
+    }
+    header p {
+      margin-top: 8px;
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      opacity: 0.9;
+    }
+    .shiva-avatar {
+      font-size: 80px;
+      display: block;
+      margin: 0 auto 12px;
+      animation: wiggle 2s infinite;
+    }
+    @keyframes wiggle {
+      0%,100% { transform: rotate(-5deg); }
+      50%      { transform: rotate(5deg); }
+    }
+
+    /* ─── MAIN ─── */
+    main {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 30px 16px;
+    }
+
+    .intro-box {
+      background: #fff3e0;
+      border: 2px dashed var(--primary);
+      border-radius: 16px;
+      padding: 18px 22px;
+      margin-bottom: 32px;
+      font-size: 1rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .intro-box strong { color: var(--primary); }
+
+    /* ─── WEEK GRID ─── */
+    .week-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .day-card {
+      background: var(--card);
+      border-radius: 18px;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .day-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+    }
+
+    .day-header {
+      padding: 14px 18px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.25rem;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .day-card:nth-child(1) .day-header { background: #e63946; }
+    .day-card:nth-child(2) .day-header { background: #f4a261; }
+    .day-card:nth-child(3) .day-header { background: #2a9d8f; }
+    .day-card:nth-child(4) .day-header { background: #6a4c93; }
+    .day-card:nth-child(5) .day-header { background: #1d7cbb; }
+    .day-card:nth-child(6) .day-header { background: #e76f51; }
+    .day-card:nth-child(7) .day-header { background: #457b9d; }
+
+    .slots {
+      padding: 14px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .slot-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .time-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--muted);
+      min-width: 70px;
+    }
+
+    .book-btn {
+      flex: 1;
+      padding: 9px 14px;
+      background: linear-gradient(135deg, #ff6b35, #f7971e);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 0.82rem;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+      letter-spacing: 0.4px;
+    }
+    .book-btn:hover  { opacity: 0.88; transform: scale(1.03); }
+    .book-btn:active { transform: scale(0.97); }
+
+    /* ─── MODAL ─── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .overlay.show { display: flex; }
+
+    .modal {
+      background: white;
+      border-radius: 24px;
+      max-width: 420px;
+      width: 100%;
+      padding: 36px 30px 28px;
+      text-align: center;
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+
+    .modal-emoji {
+      font-size: 72px;
+      display: block;
+      margin-bottom: 12px;
+      animation: bounce 0.6s 0.1s ease both;
+    }
+    @keyframes bounce {
+      0%   { transform: translateY(-30px); opacity:0; }
+      60%  { transform: translateY(6px); }
+      100% { transform: translateY(0); opacity:1; }
+    }
+
+    .modal h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.5rem;
+      color: var(--danger);
+      margin-bottom: 10px;
+    }
+
+    .modal .funny-msg {
+      font-size: 1.1rem;
+      line-height: 1.55;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+
+    .modal .sub-msg {
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .close-btn {
+      background: linear-gradient(135deg, #e63946, #c1121f);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 12px 32px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+    .close-btn:hover  { transform: scale(1.05); }
+    .close-btn:active { transform: scale(0.97); }
+
+    .booking-info {
+      background: #fff3e0;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.83rem;
+      color: #666;
+      margin-bottom: 18px;
+    }
+    .booking-info strong { color: var(--primary); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <span class="shiva-avatar">🧔</span>
+  <h1>Book an Appointment with Shiva</h1>
+  <p>World's busiest guy — pick a slot (if you dare) 😂</p>
+</header>
+
+<main>
+  <div class="intro-box">
+    <strong>⚠️ Disclaimer:</strong> Shiva's calendar is technically open. Practically speaking, Shiva is
+    <em>always</em> doing something more important than meeting you.
+    But hey — give it a shot! 🤷
+  </div>
+
+  <div class="week-grid" id="weekGrid"></div>
+</main>
+
+<footer>
+  Powered by Shiva's Extremely Packed Schedule™ &nbsp;|&nbsp; Success rate: 0%
+</footer>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <span class="modal-emoji" id="modalEmoji">😅</span>
+    <h2>Booking Failed!</h2>
+    <div class="booking-info" id="bookingInfo"></div>
+    <p class="funny-msg" id="funnyMsg"></p>
+    <p class="sub-msg" id="subMsg"></p>
+    <button class="close-btn" onclick="closeModalDirect()">😭 Try Again (lol)</button>
+  </div>
+</div>
+
+<script>
+  const days = [
+    { name: "Monday",    emoji: "😩" },
+    { name: "Tuesday",   emoji: "😤" },
+    { name: "Wednesday", emoji: "🤔" },
+    { name: "Thursday",  emoji: "😎" },
+    { name: "Friday",    emoji: "🥳" },
+    { name: "Saturday",  emoji: "😴" },
+    { name: "Sunday",    emoji: "🙏" },
+  ];
+
+  const timeSlots = [
+    "9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM", "5:00 PM", "7:00 PM"
+  ];
+
+  const excuses = [
+    {
+      emoji: "🏸",
+      msg: "Shiva is playing badminton right now.",
+      sub: "He's been playing since 6 AM. No one knows when he'll stop."
+    },
+    {
+      emoji: "🏊",
+      msg: "Sorry, Shiva is in the pool.",
+      sub: "He says he's doing laps. His friends say he's just floating."
+    },
+    {
+      emoji: "💼",
+      msg: "Shiva is in the office.",
+      sub: "He went in on a Saturday. Nobody asked why. Nobody dares."
+    },
+    {
+      emoji: "👨‍🍳",
+      msg: "Shiva is cooking something legendary.",
+      sub: "He started at noon. The smoke alarm has gone off twice. Progress."
+    },
+    {
+      emoji: "✈️",
+      msg: "Shiva is in Reno. Without Manju.",
+      sub: "What happens in Reno... we don't ask."
+    },
+    {
+      emoji: "🛌",
+      msg: "Shiva is taking his 'power nap'.",
+      sub: "It started at 2 PM. It is now tomorrow."
+    },
+    {
+      emoji: "🎮",
+      msg: "Shiva is in the middle of a very important gaming session.",
+      sub: "He said 'just 5 more minutes' three hours ago."
+    },
+    {
+      emoji: "📱",
+      msg: "Shiva is on a very important WhatsApp forward chain.",
+      sub: "He must forward it to 10 people or something bad will happen."
+    },
+    {
+      emoji: "🏋️",
+      msg: "Shiva is at the gym.",
+      sub: "Day 1 of his new fitness journey. Again."
+    },
+    {
+      emoji: "🍿",
+      msg: "Shiva is watching 'just one episode'.",
+      sub: "He's on season 4. He started this morning."
+    },
+    {
+      emoji: "🧘",
+      msg: "Shiva is doing yoga and finding inner peace.",
+      sub: "He will be unavailable until he solves the meaning of life."
+    },
+    {
+      emoji: "🚗",
+      msg: "Shiva is stuck in traffic.",
+      sub: "The traffic is in front of his own house. It's his car. Long story."
+    },
+    {
+      emoji: "☕",
+      msg: "Shiva is making chai.",
+      sub: "This is his 7th cup today. The process is sacred. Do not interrupt."
+    },
+    {
+      emoji: "📞",
+      msg: "Shiva is on a call with his mom.",
+      sub: "It started as a 2-minute check-in. That was 90 minutes ago."
+    },
+    {
+      emoji: "🪑",
+      msg: "Shiva is doing absolutely nothing.",
+      sub: "He worked hard for this. He's earned it. Respect."
+    },
+  ];
+
+  function buildCalendar() {
+    const grid = document.getElementById('weekGrid');
+    days.forEach(day => {
+      const card = document.createElement('div');
+      card.className = 'day-card';
+      card.innerHTML = `
+        <div class="day-header">${day.emoji} ${day.name}</div>
+        <div class="slots">
+          ${timeSlots.map(t => `
+            <div class="slot-row">
+              <span class="time-label">${t}</span>
+              <button class="book-btn" onclick="tryBook('${day.name}', '${t}')">
+                📅 Book Slot
+              </button>
+            </div>
+          `).join('')}
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  }
+
+  function tryBook(day, time) {
+    const excuse = excuses[Math.floor(Math.random() * excuses.length)];
+    document.getElementById('modalEmoji').textContent = excuse.emoji;
+    document.getElementById('funnyMsg').textContent = excuse.msg;
+    document.getElementById('subMsg').textContent = excuse.sub;
+    document.getElementById('bookingInfo').innerHTML =
+      `You tried to book <strong>${day}</strong> at <strong>${time}</strong>. Bold move.`;
+    document.getElementById('overlay').classList.add('show');
+  }
+
+  function closeModalDirect() {
+    document.getElementById('overlay').classList.remove('show');
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('overlay')) closeModalDirect();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModalDirect();
+  });
+
+  buildCalendar();
+</script>
+</body>
+</html>
