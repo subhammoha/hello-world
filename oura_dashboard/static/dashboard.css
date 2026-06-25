@@ -1,0 +1,25 @@
+body {
+  font-family: -apple-system, system-ui, sans-serif;
+  margin: 0;
+  padding: 1.5rem;
+  background: #0f172a;
+  color: #e2e8f0;
+}
+.muted { color: #94a3b8; }
+.cards {
+  display: flex;
+  gap: 1rem;
+  margin: 1.5rem 0;
+  flex-wrap: wrap;
+}
+.card {
+  background: #1e293b;
+  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  min-width: 140px;
+}
+.card-label { font-size: 0.85rem; color: #94a3b8; }
+.card-value { font-size: 1.8rem; font-weight: 600; }
+.unit { font-size: 1rem; color: #94a3b8; }
+.chart-block { margin-bottom: 2rem; }
+canvas { max-width: 100%; }
