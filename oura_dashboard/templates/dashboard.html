@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Oura Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="{{ url_for('static', filename='vendor/chart.umd.min.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+</head>
+<body>
+  <header>
+    <h1>Oura Ring Dashboard</h1>
+    {% if device %}
+      <p class="muted">
+        {{ device.serial }} · firmware {{ device.firmware }} ·
+        last sync {{ sync_state.last_sync_unix | default('never') }}
+      </p>
+    {% else %}
+      <p class="muted">No device found in database yet. Run <code>oura sync</code> first.</p>
+    {% endif %}
+  </header>
+
+  <section class="cards">
+    <div class="card">
+      <div class="card-label">Heart rate</div>
+      <div class="card-value">{{ latest_hr.value if latest_hr else '—' }} <span class="unit">{{ latest_hr.unit if latest_hr else '' }}</span></div>
+    </div>
+    <div class="card">
+      <div class="card-label">SpO2</div>
+      <div class="card-value">{{ latest_spo2.value if latest_spo2 else '—' }} <span class="unit">{{ latest_spo2.unit if latest_spo2 else '' }}</span></div>
+    </div>
+    <div class="card">
+      <div class="card-label">Battery</div>
+      <div class="card-value">{{ latest_battery.value if latest_battery else '—' }} <span class="unit">{{ latest_battery.unit if latest_battery else '' }}</span></div>
+    </div>
+  </section>
+
+  <section id="charts">
+    {% for kind in chart_kinds %}
+      <div class="chart-block">
+        <h2>{{ kind }}</h2>
+        <canvas class="reading-chart" data-kind="{{ kind }}"></canvas>
+      </div>
+    {% endfor %}
+  </section>
+
+  {% if sleep_kinds %}
+  <section>
+    <h2>Sleep stages</h2>
+    <canvas id="sleep-chart"></canvas>
+  </section>
+  {% endif %}
+
+  <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+</body>
+</html>
