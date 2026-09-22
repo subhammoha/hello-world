@@ -37,6 +37,24 @@ Setup options inside the app:
 - **Bring-your-own-key**: doesn't reset anything. Use a key you extracted yourself (see below).
 - **File import**
 
+### Mac quickstart
+
+1. **Check your macOS version.** Go to Apple menu → About This Mac. NOOP needs macOS 13 (Ventura)
+   or newer.
+2. **Download.** Open the newest [release](https://github.com/NoopApp/noop/releases), scroll to
+   **Assets**, and download the macOS universal `.zip`. Unzip it and drag **NOOP** into
+   **Applications**. NOOP's own README also documents a Homebrew install.
+3. **First launch.** The app is unsigned, so right-click NOOP → **Open** → **Open**. If macOS still
+   blocks it, go to System Settings → **Privacy & Security** → **Open Anyway**. When the app asks for
+   Bluetooth access, click **Allow**.
+4. **Prepare the ring.** Charge it and keep it next to the Mac. Quit the Oura app on your phone, or
+   turn the phone's Bluetooth off for a minute, so the phone doesn't grab the ring.
+5. **Add the ring.** In NOOP, add a device → **Oura** → **factory-reset + adopt**. If it fails,
+   re-pair the ring in the Oura app. Nothing gets bricked.
+6. **Use it.** The ring syncs whenever it's in Bluetooth range of the Mac, so keep the Mac nearby
+   (at your desk, or by the bed overnight). You'll see HR, HRV, SpO2, skin temperature, sleep
+   stages, and NOOP's Charge/Effort/Rest scores. With only a Mac, there's no phone view.
+
 > ⚠️ NOOP's Oura support is **early beta and not yet verified on real hardware**, so it may not
 > work on every ring or firmware. If it doesn't work for your ring, or if you want raw data with
 > CSV/JSON export, use the open_oura + dashboard path below.
@@ -48,7 +66,9 @@ Setup options inside the app:
 
 ## 1. Build open_oura and pair your ring
 
-On a Bluetooth-capable Linux, macOS, or Windows machine:
+On a Bluetooth-capable Linux, macOS, or Windows machine. On macOS, first enable your terminal app
+under System Settings → Privacy & Security → **Bluetooth** (Terminal or iTerm), or `oura` won't find
+the ring.
 
 ```bash
 git clone https://github.com/Th0rgal/open_oura
